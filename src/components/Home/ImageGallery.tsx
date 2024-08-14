@@ -13,7 +13,7 @@ const ImageGallery = ({ images }: any) => {
         style={{
           backgroundImage: `url(${selectedImage})`,
           backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundPosition: "center ",
         }}
       >
         {/* Thumbnails Overlay */}
@@ -38,4 +38,3 @@ const ImageGallery = ({ images }: any) => {
 };
 
 export default ImageGallery;
-
