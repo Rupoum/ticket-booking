@@ -1,13 +1,9 @@
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import Header2 from "@/components/Home/Header2";
 
 export default function Home() {
   return (
-    <>
-      <div className="m-5">
-        <h1>hello</h1>
-        <Button>hello from shad cn ui </Button>
-      </div>
-    </>
+    <div>
+      <Header2 />
+    </div>
   );
 }

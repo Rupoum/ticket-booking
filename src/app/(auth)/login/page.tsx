@@ -15,13 +15,13 @@ const page = () => {
             type="email"
             name="email "
             placeholder="Email"
-            className="bg-[#333] placeholder:text-xs placeholder:text-gray-400 w-full inline-block"
+            className="bg-[#333] placeholder:text-xs text-white placeholder:text-gray-400 w-full inline-block"
           />
           <Input
             type="password"
             name="password"
             placeholder="Password"
-            className="bg-[#333] placeholder:text-xs placeholder:text-gray-400 w-full inline-block"
+            className="bg-[#333] placeholder:text-xs text-white placeholder:text-gray-400 w-full inline-block"
           />
 
           <Button
