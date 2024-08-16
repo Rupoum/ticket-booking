@@ -1,5 +1,6 @@
 import Image from "next/image";
 import BackgroundImage from "../../../public/assets/coverBg.png";
+
 export default function AuthLayout({
   children,
 }: Readonly<{
