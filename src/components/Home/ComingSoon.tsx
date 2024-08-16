@@ -69,7 +69,7 @@ const CurrentlyPlaying = () => {
   const [selectedMovie, setSelectedMovie] = React.useState(null);
 
   // Function to open modal
-  const openModal = (movie) => {
+  const openModal = (movie: any) => {
     setSelectedMovie(movie);
   };
 
