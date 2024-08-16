@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import { Button } from "../ui/button";
 
 const Header = () => {
   const [items, setItems] = useState([
@@ -82,18 +83,32 @@ const Header = () => {
         </div>
 
         <div className="absolute bottom-5 flex justify-center w-full space-x-4">
-          <button
+          {/* <button
             onClick={prevSlide}
             className="w-10 h-10 rounded-md border-2 border-black transition hover:bg-gray-500 hover:text-white flex justify-center items-center"
           >
             <ChevronLeft />
-          </button>
-          <button
+          </button> */}
+          <Button
+            onClick={prevSlide}
+            className="w-10 h-10 rounded-md border-2 border-black transition hover:bg-gray-500 hover:text-white flex justify-center items-center"
+          >
+            {" "}
+            <ChevronLeft />
+          </Button>
+          {/* <button
             onClick={nextSlide}
             className="w-10 h-10 rounded-md border-2 border-black transition hover:bg-gray-500 hover:text-white flex justify-center items-center"
           >
             <ChevronRight />
-          </button>
+          </button> */}
+          <Button
+            onClick={prevSlide}
+            className="w-10 h-10 rounded-md border-2 border-black transition hover:bg-gray-500 hover:text-white flex justify-center items-center"
+          >
+            {" "}
+            <ChevronRight />
+          </Button>
         </div>
       </div>
     </div>
