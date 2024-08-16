@@ -17,7 +17,7 @@ import {
   DialogContent,
   DialogTitle,
   DialogDescription,
-} from "@/components/ui/dialog"; // Import Shadcn Dialog components
+} from "@/components/ui/dialog";
 
 // Define the Movie interface
 interface Movie {
@@ -30,6 +30,41 @@ interface Movie {
 const CurrentlyPlaying = () => {
   // Sample movie data with image URLs
   const movies: Movie[] = [
+    {
+      name: "Movie 1",
+      date: "20 April",
+      rating: "18+",
+      imageUrl:
+        "https://images-cdn.ubuy.co.in/634d0a48023cd2292277f3df-avengers-endgame-marvel-studios-framed.jpg",
+    },
+    {
+      name: "Movie 2",
+      date: "21 April",
+      rating: "PG-13",
+      imageUrl:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-dtyrpDq8x5vqSSobaxz0-Ak3mhk7wp0wkQ&s",
+    },
+    {
+      name: "Movie 3",
+      date: "22 April",
+      rating: "R",
+      imageUrl:
+        "https://m.media-amazon.com/images/I/91zTlD7AY1L._AC_UF1000,1000_QL80_.jpg",
+    },
+    {
+      name: "Movie 4",
+      date: "23 April",
+      rating: "PG",
+      imageUrl:
+        "https://artofthemovies.co.uk/cdn/shop/files/IMG_4154_1-780453_de0cc110-550d-4448-a7ec-d3ff945c0739.jpg?v=1696169470",
+    },
+    {
+      name: "Movie 5",
+      date: "24 April",
+      rating: "G",
+      imageUrl:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFXFBVUSIv-30rx7iCyfdi1ChHI-NTpZZzzQ&s",
+    },
     {
       name: "Movie 1",
       date: "20 April",
