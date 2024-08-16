@@ -14,15 +14,22 @@ import { MoveRight } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog"; // Import Shadcn Dialog components
 
+// Define the Movie interface
+interface Movie {
+  name: string;
+  date: string;
+  rating: string;
+  imageUrl: string;
+}
+
 const CurrentlyPlaying = () => {
   // Sample movie data with image URLs
-  const movies = [
+  const movies: Movie[] = [
     {
       name: "Movie 1",
       date: "20 April",
@@ -66,10 +73,10 @@ const CurrentlyPlaying = () => {
   );
 
   // State for modal
-  const [selectedMovie, setSelectedMovie] = React.useState(null);
+  const [selectedMovie, setSelectedMovie] = React.useState<Movie | null>(null);
 
   // Function to open modal
-  const openModal = (movie) => {
+  const openModal = (movie: Movie) => {
     setSelectedMovie(movie);
   };
 
