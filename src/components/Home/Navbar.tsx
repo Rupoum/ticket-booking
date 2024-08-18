@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { User } from "lucide-react";
+import { ModeToggle } from "../ui/themeToggle";
 
 const HeaderNav = () => {
   return (
@@ -33,7 +34,7 @@ const HeaderNav = () => {
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Button>Toggle</Button>
+          <ModeToggle />
         </NavbarItem>
       </NavbarContent>
     </Navbar>
