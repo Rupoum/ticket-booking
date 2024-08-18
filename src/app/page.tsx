@@ -5,7 +5,7 @@ import MainHeader from "@/components/Home/MainHeader";
 
 export default function Home() {
   return (
-    <div className="">
+    <div className="dark:bg-black">
       {/* <Header2 /> */}
 
       {/* <Navbar /> */}

@@ -12,6 +12,19 @@ import {
 } from "@/components/ui/carousel";
 import { MoveRight } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+// Define the Movie interface
+interface Movie {
+  name: string;
+  date: string;
+  rating: string;
+  imageUrl: string;
+}
 const CurrentlyPlaying = () => {
   // Sample movie data with image URLs
   const movies = [
@@ -132,6 +145,19 @@ const CurrentlyPlaying = () => {
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true })
   );
+
+  // State for modal
+  const [selectedMovie, setSelectedMovie] = React.useState<Movie | null>(null);
+
+  // Function to open modal
+  const openModal = (movie: Movie) => {
+    setSelectedMovie(movie);
+  };
+
+  // Function to close modal
+  const closeModal = () => {
+    setSelectedMovie(null);
+  };
   return (
     <div className="m-10">
       <div className="flex justify-between">
@@ -163,8 +189,9 @@ const CurrentlyPlaying = () => {
                 className="mx-2 sm:basis-auto md:basis-auto lg:basis-auto"
               >
                 <Card
-                  className="w-56 h-64 flex flex-col justify-between bg-cover bg-center"
+                  className="w-56 h-64 flex flex-col justify-between bg-cover bg-center cursor-pointer"
                   style={{ backgroundImage: `url('${movie.imageUrl}')` }} // Use the image URL from movie data
+                  onClick={() => openModal(movie)}
                 >
                   <div className="flex-grow"></div>
                   <div className="px-5">
@@ -180,6 +207,24 @@ const CurrentlyPlaying = () => {
           </CarouselContent>
         </Carousel>
       </div>
+      {/* Modal for displaying movie details */}
+      <Dialog open={!!selectedMovie} onOpenChange={closeModal}>
+        <DialogContent>
+          <DialogTitle>{selectedMovie?.name}</DialogTitle>
+          <img
+            src={selectedMovie?.imageUrl}
+            alt={selectedMovie?.name}
+            className="w-28 h-32 mb-4"
+          />
+          <DialogDescription>
+            <p>Date: {selectedMovie?.date}</p>
+            <p>Rating: {selectedMovie?.rating}</p>
+          </DialogDescription>
+          <Button onClick={closeModal} variant="destructive" className="mt-4">
+            Book Tickets
+          </Button>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
