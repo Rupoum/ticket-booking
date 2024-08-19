@@ -32,7 +32,8 @@ const Login = () => {
         setAuth({
           isAuthenticated: true,
           user,
-          token
+          token,
+          role:"sd"
         });
 
         // Optionally store token in localStorage or sessionStorage

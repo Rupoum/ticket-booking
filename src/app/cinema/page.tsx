@@ -2,14 +2,16 @@
 import React from "react";
 import { RecoilRoot } from "recoil";
 import { CreateCinema } from "../../components/templates/CreateCinema";
-import withAuth from "@/components/atoms/protecting"; 
+import ProtectedRoute from "@/components/atoms/protecting";
 
-function Cinema() {
+export default function Cinema() {
   return (
     <RecoilRoot>
+        <ProtectedRoute requiredRole="Customer">
       <CreateCinema />
+      </ProtectedRoute>
     </RecoilRoot>
   );
 }
 
-export default withAuth(Cinema, { requiredRole: "customer" });
+

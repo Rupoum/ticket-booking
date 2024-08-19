@@ -6,6 +6,7 @@ import { Button } from "../components/ui/button";
 import { useRecoilState } from "recoil";
 import { authState } from "./atoms/atomauth";
 import { Input } from "../components/ui/input";
+import {jwtDecode} from "jwt-decode"; // Correct import
 
 const OTPPage = () => {
   const [otp, setOtp] = useState('');
@@ -27,8 +28,6 @@ const OTPPage = () => {
       }
 
       const parsedData = JSON.parse(tempUserData);
-
-      // Extract user data
       const { name, email, password } = parsedData;
 
       // Validate that required fields are present
@@ -41,22 +40,25 @@ const OTPPage = () => {
         code: otp,
         name,
         email,
-        password
+        password,
       });
 
       if (response.status === 200) {
-        // Extract token and user from the response
-        const { token, user } = response.data;
-console.log(token);
-console.log(user);
-        // Save the token and user data to localStorage or state management
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
+        const token = response.data.token;
+        const decodedToken = jwtDecode<{ role: string }>(token);
 
-        // Clear tempUserData from localStorage
-        localStorage.removeItem('tempUserData');
+        // Update the Recoil state with the decoded token information
+        setAuth({
+          isAuthenticated: true,
+          role: decodedToken.role,
+          user: response.data.user,
+          token: token,
+        });
 
-        // Redirect to the home page or a protected route
+      
+        // Save the token to localStorage
+        localStorage.setItem('authToken', token);
+
         router.push('/');
       } else {
         setError(response.data.message || 'OTP verification failed. Please try again.');

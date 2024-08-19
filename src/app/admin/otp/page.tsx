@@ -1,5 +1,5 @@
 "use client"
-import OTP from "@/components/otp";
+import OTP from "@/components/adminotp";
 import { RecoilRoot } from "recoil";
 export default function otp(){
   return(

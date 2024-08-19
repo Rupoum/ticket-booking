@@ -48,9 +48,9 @@ export const CreateCinemaContent = ({}: ICreateCinemaProps) => {
   const createCinema = async (cinemaData: FormTypeCreateCinema) => {
     try {
       const response = await axios.post('http://localhost:5000/api/cinema/cinema', cinemaData, {
-        // headers: {
-        //   Authorization: `Bearer ${localStorage.getItem('token')}`,
-        // },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
       })
       return response.data
     } catch (error: any) {

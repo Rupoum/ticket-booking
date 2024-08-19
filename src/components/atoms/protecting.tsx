@@ -1,30 +1,35 @@
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { useAuth } from '../context/Authcontext'; // Adjust the path as necessary
+// components/ProtectedRoute.tsx
+import { useRecoilValue } from 'recoil';
+import { authState } from '../atoms/atomauth';
+import { useRouter } from 'next/navigation';
+import { ReactNode, useEffect } from 'react';
 
-interface WithAuthProps {
-  requiredRole: 'admin' | 'manager' | 'customer';
+interface ProtectedRouteProps {
+  children: ReactNode;
+  requiredRole: string;
 }
 
-const withAuth = (WrappedComponent: React.ComponentType, { requiredRole }: WithAuthProps) => {
-  return (props: any) => {
-    const { user, loading } = useAuth(); // Assume useAuth provides user and loading state
-    const router = useRouter();
+const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
+  const auth = useRecoilValue(authState);
+  const router = useRouter();
 
-    useEffect(() => {
-      if (!loading) {
-        if (!user || user.role !== requiredRole) {
-          router.push('/login'); // Redirect to login if not authorized
-        }
-      }
-    }, [user, loading, router]);
+  useEffect(() => {
+    console.log('Authenticated:', auth.isAuthenticated);
+    console.log('User role:', auth.role);
+    console.log('Required role:', requiredRole);
 
-    if (loading || !user || user.role !== requiredRole) {
-      return <p>Loading...</p>; // Display loading state or spinner
+    if (!auth.isAuthenticated) {
+      router.push('/login'); // Redirect to login if not authenticated
+    } else if (auth.role !== requiredRole) {
+      router.push('/unauthorized'); // Redirect if user doesn't have required role
     }
+  }, [auth, requiredRole, router]);
 
-    return <WrappedComponent {...props} />;
-  };
+  if (!auth.isAuthenticated || auth.role !== requiredRole) {
+    return null; // or a loading spinner
+  }
+
+  return <>{children}</>;
 };
 
-export default withAuth;
+export default ProtectedRoute;

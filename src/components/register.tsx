@@ -33,9 +33,10 @@ const Signup = () => {
       
       if (response.status === 200) {
         setAuth({
-          isAuthenticated: false, 
+          isAuthenticated: true, 
           user: response.data.user,
-          token:null
+          token:null,
+        role:"Customer"
         });
         // Redirect to OTP verification pages
         router.push('/otp');
