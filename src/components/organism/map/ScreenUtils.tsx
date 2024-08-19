@@ -1,5 +1,5 @@
-import { cn } from "../../utils"
-import React from "react"
+import { cn } from "../../utils";
+import React from "react";
 
 export const StaightMovieScreen = () => {
   return (
@@ -11,11 +11,17 @@ export const StaightMovieScreen = () => {
       </div>
       <div className="text-xs text-center text-gray-500">Eyes this way</div>
     </div>
-  )
-}
+  );
+};
 
-export const CurvedScreen = ({ width = 300, height = 10 }: { width?: number; height?: number }) => {
-  const curveOffset = height * 0.9 // Controls the curvature of the screen
+export const CurvedScreen = ({
+  width = 300,
+  height = 10,
+}: {
+  width?: number;
+  height?: number;
+}) => {
+  const curveOffset = height * 0.9; // Controls the curvature of the screen
 
   return (
     <svg
@@ -28,44 +34,50 @@ export const CurvedScreen = ({ width = 300, height = 10 }: { width?: number; hei
         d={`M 0,${height} L 0,0 Q ${
           width / 2
         },${curveOffset} ${width},0 L ${width},${height} Z`}
-        fill="black"
+        fill="white"
       />
     </svg>
-  )
-}
+  );
+};
 
-export const Square = ({ booked = false, selected = false }: { booked?: boolean; selected?: boolean }) => {
+export const Square = ({
+  booked = false,
+  selected = false,
+}: {
+  booked?: boolean;
+  selected?: boolean;
+}) => {
   return (
     <div
       className={cn(
-        'w-5 transition-all h-5 border border-black/50 rounded shadow-md',
-        booked ? 'bg-gray-200 shadow-inner border-0' : '',
+        "w-5 transition-all h-5 border border-black/50 dark:border-white rounded shadow-md",
+        booked ? "bg-gray-200 shadow-inner border-0" : "",
         selected
-          ? 'bg-primary-500 p-1 border-0 shadow-black/30 shadow-lg'
-          : ''
+          ? "bg-primary-500  dark:bg-white p-1 border-0 shadow-black/30 shadow-lg"
+          : ""
       )}
     />
-  )
-}
+  );
+};
 
 export const Grid = ({ rows, columns }: { rows: number; columns: number }) => {
   const renderRows = () => {
-    const rowElements: JSX.Element[] = []
+    const rowElements: JSX.Element[] = [];
 
     for (let i = 0; i < rows; i++) {
-      const columnElements: JSX.Element[] = []
+      const columnElements: JSX.Element[] = [];
       for (let j = 0; j < columns; j++) {
-        columnElements.push(<Square key={`${i}-${j}`} />)
+        columnElements.push(<Square key={`${i}-${j}`} />);
       }
       rowElements.push(
         <div key={`row-${i}`} className="flex gap-1">
           {columnElements}
         </div>
-      )
+      );
     }
 
-    return rowElements
-  }
+    return rowElements;
+  };
 
   return (
     <div className="w-full">
@@ -74,5 +86,5 @@ export const Grid = ({ rows, columns }: { rows: number; columns: number }) => {
         <CurvedScreen />
       </div>
     </div>
-  )
-}
+  );
+};
