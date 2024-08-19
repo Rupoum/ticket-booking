@@ -7,14 +7,14 @@ import axios from "axios";
 import { register } from "./axios/mainaxios";
 import { useRouter } from "next/navigation";
 import { useRecoilState } from "recoil";
-import { authState } from "./atoms/atomauth";
+import { authstate } from "./atoms/atomauth";
 
 const Signup = () => {
   // State variables to handle form input, loading, and error states
   const [formdata, setFormdata] = useState({ email: '', password: '', name: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [auth, setAuth] = useRecoilState(authState);
+  const [auth, setAuth] = useRecoilState(authstate);
   const router = useRouter();
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -29,14 +29,12 @@ const Signup = () => {
   };
 
     try {
-      const response = await axios.post("http://localhost:5000/api/customer/signup",signupData)
+      const response = await axios.post("http://localhost:5000/api/admin/signup",signupData)
       
       if (response.status === 200) {
         setAuth({
-          isAuthenticated: true, 
+          isAuthinticated: false, // Not authenticated until OTP is verified
           user: response.data.user,
-          token:null,
-        role:"Customer"
         });
         // Redirect to OTP verification pages
         router.push('/otp');
@@ -51,7 +49,7 @@ const Signup = () => {
     }
   };
 
-  if (auth.isAuthenticated) return <div>You are already Signed in</div>;
+  if (auth.isAuthinticated) return <div>You are already Signed in</div>;
 
   return (
     <div className="mt-24 rounded-xl bg-black/80 py-10 px-6 md:mt-0 md:max-w-sm md:px-14">

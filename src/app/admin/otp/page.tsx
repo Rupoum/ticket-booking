@@ -1,14 +1,12 @@
 "use client"
-import OTP from "@/components/otp";
-import OTPPage from "@/components/otp2";
+import OTP from "@/components/adminotp";
 import { RecoilRoot } from "recoil";
 export default function otp(){
   return(
     <RecoilRoot>
-<OTPPage></OTPPage>
-    {/* <OTP>
+    <OTP>
 
-    </OTP> */}
+    </OTP>
     </RecoilRoot>
   )
 }
