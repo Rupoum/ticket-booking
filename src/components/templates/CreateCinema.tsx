@@ -290,8 +290,9 @@ export const CurvedScreen = ({ width = 300, height = 10 }) => {
         d={`M 0,${height} L 0,0 Q ${
           width / 2
         },${curveOffset} ${width},0 L ${width},${height} Z`}
-        fill="black"
-      />
+        fill="Blue"
+
+/>
     </svg>
   )
 }

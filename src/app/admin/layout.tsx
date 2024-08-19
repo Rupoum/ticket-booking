@@ -15,6 +15,7 @@ export default function AuthLayout({
         priority
         fill
       />
+      
       {children}
     </div>
   );

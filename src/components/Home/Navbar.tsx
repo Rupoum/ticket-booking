@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react";
 import {
   Navbar,
@@ -12,7 +14,8 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { User } from "lucide-react";
 import { ModeToggle } from "../ui/themeToggle";
-
+import Logout from "@/app/(auth)/logout";
+import { RecoilRoot } from "recoil";
 const HeaderNav = () => {
   return (
     <Navbar
@@ -31,6 +34,11 @@ const HeaderNav = () => {
         <NavbarItem className="hidden lg:flex">
           <Link href="#">
             <User />
+            <RecoilRoot>
+              <Logout/>
+
+              
+            </RecoilRoot>
           </Link>
         </NavbarItem>
         <NavbarItem>
