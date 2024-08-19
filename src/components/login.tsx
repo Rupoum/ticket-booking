@@ -4,74 +4,65 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import axios from "axios";
-import { register } from "./axios/mainaxios";
 import { useRouter } from "next/navigation";
 import { useRecoilState } from "recoil";
 import { authState } from "./atoms/atomauth";
 
-const Signup = () => {
-  // State variables to handle form input, loading, and error states
-  const [formdata, setFormdata] = useState({ email: '', password: '', name: '' });
+const Login = () => {
+  const [formdata, setFormdata] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [auth, setAuth] = useRecoilState(authState);
   const router = useRouter();
 
-  const handleSignup = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevent the form from refreshing the page on submit
     setLoading(true);
     setError("");
-    const signupData = {
-      name: formdata.name,
-      email: formdata.email,
-      password: formdata.password,
-      // reason: "ds" // Include any additional parameters you need
-  };
+
+    const login = { email: formdata.email, password: formdata.password };
 
     try {
-      const response = await axios.post("http://localhost:5000/api/customer/signup",signupData)
-      
+      const response = await axios.post("http://localhost:5000/api/customer/login", login);
+
       if (response.status === 200) {
+        const { token, user } = response.data;
+             console.log(token,user);
+        // Update the auth state with user data and token
         setAuth({
-          isAuthenticated: false, 
-          user: response.data.user,
-          token:null
+          isAuthenticated: true,
+          user,
+          token
         });
-        // Redirect to OTP verification pages
-        router.push('/otp');
-        localStorage.setItem('tempUserData', JSON.stringify(signupData));
+
+        // Optionally store token in localStorage or sessionStorage
+        localStorage.setItem('token', token);
+
+        // Redirect to the dashboard or a protected route
+        router.push('/');
       } else {
-        setError(response.data.message || "Signup failed. Please try again.");
+        setError(response.data.message || "Login failed");
       }
+    } catch (error) {
       setError("Please try again later.");
-        console.error(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
-  if (auth.isAuthenticated) return <div>You are already Signed in</div>;
+  if (auth.isAuthenticated) return <div>You are already logged in</div>;
 
   return (
     <div className="mt-24 rounded-xl bg-black/80 py-10 px-6 md:mt-0 md:max-w-sm md:px-14">
-      <form action="" onSubmit={handleSignup}>
+      <form onSubmit={handleLogin}>
         <div className="flex justify-center">
-          <h1 className="text-3xl font-semibold text-white ">Signup</h1>
+          <h1 className="text-3xl font-semibold text-white">Login</h1>
         </div>
         <div className="space-y-4 mt-5">
           <Input
-            type="name"
-            name="name "
-            value={formdata.name}
-            onChange={(e) => setFormdata({ ...formdata, name: e.target.value })}
-            placeholder="Name"
-            className="bg-[#333] placeholder:text-xs text-white placeholder:text-gray-400 w-full inline-block"
-            required
-            disabled={loading}
-         />
-          <Input
             type="email"
-            name="email "
+            name="email"
             placeholder="Email"
             value={formdata.email}
             onChange={(e) => setFormdata({ ...formdata, email: e.target.value })}
@@ -89,27 +80,26 @@ const Signup = () => {
             required
             disabled={loading}
           />
-
           <Button
-           type="submit"
+            type="submit"
             variant="destructive"
-            className="bg-[#e50914] text-black w-full "
+            className="bg-[#e50914] text-black w-full"
             disabled={loading}
-         >
- {loading ? "Signing up..." : "Sign Up"}
+          >
+            {loading ? "Logging in..." : "Log In"}
           </Button>
         </div>
         {error && <p className="text-red-500 mt-2">{error}</p>}
       </form>
 
       <div className="text-gray-500 text-sm mt-2">
-        Already have an account ?
-        <Link href="/login" className="text-white  ml-1 hover:underline">
-          Log in now !
+        Don't have an account?
+        <Link href="/signup" className="text-white ml-1 hover:underline">
+          Sign up now!
         </Link>
       </div>
     </div>
   );
 };
 
-export default Signup;
+export default Login;
