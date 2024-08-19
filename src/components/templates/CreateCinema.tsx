@@ -1,22 +1,22 @@
-'use client'
-import { Label } from '../atoms/label'
-import { Input } from '../atoms/input'
-import { Button } from '../atoms/button'
-import React from 'react'
-import { useFormContext, useWatch, useFieldArray } from 'react-hook-form'
-import { HtmlSelect } from '../atoms/select'
+"use client";
+import { Label } from "../atoms/label";
+import { Input } from "../atoms/input";
+import { Button } from "../atoms/button";
+import React from "react";
+import { useFormContext, useWatch, useFieldArray } from "react-hook-form";
+import { HtmlSelect } from "../atoms/select";
 import {
   FormProviderCreateCinema,
   FormTypeCreateCinema,
-} from '../forms/createCinema'
-import { useToast } from '../molecules/Toaster/use-toast'
-import { TextArea } from '../atoms/textArea'
-import { SimpleAccordion } from '../molecules/SimpleAccordion'
-import { Antenna, Plus } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import axios from 'axios'
-import { revalidatePath } from '../utils/actions/revalidatePath'
-import { Square } from '../organism/map/ScreenUtils'
+} from "../forms/createCinema";
+import { useToast } from "../molecules/Toaster/use-toast";
+import { TextArea } from "../atoms/textArea";
+import { SimpleAccordion } from "../molecules/SimpleAccordion";
+import { Antenna, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { revalidatePath } from "../utils/actions/revalidatePath";
+import { Square } from "../organism/map/ScreenUtils";
 
 enum ProjectionType {
   Imax = "Imax",
@@ -30,7 +30,7 @@ enum SoundSystemType {
   Dolby = "Dolby",
   HighAmplifier = "HighAmplifier",
   Normal = "Normal",
-  DOLBY_ATMOS = "Ddolby_Atmos"
+  DOLBY_ATMOS = "Ddolby_Atmos",
 }
 
 export interface ICreateCinemaProps {}
@@ -39,41 +39,50 @@ export const CreateCinema = () => (
   <FormProviderCreateCinema>
     <CreateCinemaContent />
   </FormProviderCreateCinema>
-)
+);
 
 export const CreateCinemaContent = ({}: ICreateCinemaProps) => {
   const { register, handleSubmit, setValue, reset } =
-    useFormContext<FormTypeCreateCinema>()
+    useFormContext<FormTypeCreateCinema>();
 
   const createCinema = async (cinemaData: FormTypeCreateCinema) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/cinema/cinema', cinemaData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      return response.data
+      const response = await axios.post(
+        "http://localhost:5000/api/cinema/cinema",
+        cinemaData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      return response.data;
     } catch (error: any) {
-      throw new Error(error.response?.data?.message || 'Failed to create cinema')
+      throw new Error(
+        error.response?.data?.message || "Failed to create cinema"
+      );
     }
-  }
+  };
 
   const onSubmit = async (data: FormTypeCreateCinema) => {
     try {
-      await createCinema(data)
-      reset()
-      toast({ title: 'Cinema created successfully.' })
-      replace('/admin/cinemas')
+      await createCinema(data);
+      reset();
+      toast({ title: "Cinema created successfully." });
+      replace("/admin/cinemas");
     } catch (error: any) {
-      toast({ title: error.message, variant: 'destructive' })
+      toast({ title: error.message, variant: "destructive" });
     }
-  }
+  };
 
-  const { toast } = useToast()
-  const { replace } = useRouter()
+  const { toast } = useToast();
+  const { replace } = useRouter();
 
   return (
-    <div className="grid gap-3 md:grid-cols-2">
+    <div className="">
+      <div className="my-10 font-bold text-4xl underline underline-offset-8  ">
+        <h1>Create Cinema</h1>
+      </div>
       <form
         onSubmit={handleSubmit(
           async ({
@@ -91,58 +100,59 @@ export const CreateCinemaContent = ({}: ICreateCinemaProps) => {
                 lng,
               },
               screens,
-            })
-            reset()
-            toast({ title: 'Cinema created successfully.' })
-            revalidatePath('admins/cinemas')
-            replace('/admin/cinemas')
-          },
+            });
+            reset();
+            toast({ title: "Cinema created successfully." });
+            revalidatePath("admins/cinemas");
+            replace("/admin/cinemas");
+          }
         )}
+        className=""
       >
-        <Label title="Cinema">
-          <Input placeholder="Cinema name" {...register('cinemaName')} />
+        <Label title="Cinema" className="text-2xl">
+          <Input placeholder="Cinema name" {...register("cinemaName")} />
         </Label>
-        <Label title="Manager ID">
-          <Input placeholder="Manager ID" {...register('managerId')} />
+        <Label className="text-2xl" title="Manager ID">
+          <Input placeholder="Manager ID" {...register("managerId")} />
         </Label>
 
-        <Label title="Address">
-          <TextArea placeholder="Address" {...register('address.address')} />
+        <Label title="Address" className="text-2xl">
+          <TextArea placeholder="Address" {...register("address.address")} />
         </Label>
         <AddScreens />
 
-        <Button type="submit" >
+        <Button type="submit" className="mt-6 dark:text-black">
           Create cinema
         </Button>
       </form>
     </div>
-  )
-}
+  );
+};
 
 const AddScreens = () => {
   const {
     control,
     register,
     formState: { errors },
-  } = useFormContext<FormTypeCreateCinema>()
+  } = useFormContext<FormTypeCreateCinema>();
   const { fields, append, remove } = useFieldArray({
     control,
     name: `screens`,
-  })
+  });
 
-  const { screens } = useWatch<FormTypeCreateCinema>()
+  const { screens } = useWatch<FormTypeCreateCinema>();
 
   return (
     <div>
       {fields.map((item: any, screenIndex: any) => (
-        <SimpleAccordion title={screenIndex + 1 || '[Empty]'} key={item.id}>
+        <SimpleAccordion title={screenIndex + 1 || "[Empty]"} key={item.id}>
           <div className={`flex justify-end my-2`}>
             <Button
               variant="link"
               size="sm"
-              className="text-xs text-gray-600 underline underline-offset-2"
+              className="text-sm text-gray-600 underline underline-offset-2"
               onClick={() => {
-                remove(screenIndex)
+                remove(screenIndex);
               }}
             >
               remove screen
@@ -192,6 +202,7 @@ const AddScreens = () => {
                   {...register(`screens.${screenIndex}.rows`, {
                     valueAsNumber: true,
                   })}
+                  className="text-black dark:text-black"
                 />
               </Label>
               <Label
@@ -204,6 +215,7 @@ const AddScreens = () => {
                   {...register(`screens.${screenIndex}.columns`, {
                     valueAsNumber: true,
                   })}
+                  className="text-black dark:text-black"
                 />
               </Label>
               <Label
@@ -216,6 +228,7 @@ const AddScreens = () => {
                   {...register(`screens.${screenIndex}.price`, {
                     valueAsNumber: true,
                   })}
+                  className="text-black dark:text-black"
                 />
               </Label>
             </div>
@@ -229,15 +242,15 @@ const AddScreens = () => {
       <div>
         <Button
           className="flex items-center justify-center w-full py-2 text-xs border border-dashed"
-          size="sm"
+          size="lg"
           variant="link"
           onClick={() =>
             append({
               columns: 0,
               rows: 0,
               price: 0,
-              projectionType: ProjectionType.Atoms, 
-              soundSystemType: SoundSystemType.Dolby
+              projectionType: ProjectionType.Atoms,
+              soundSystemType: SoundSystemType.Dolby,
             })
           }
         >
@@ -245,23 +258,23 @@ const AddScreens = () => {
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const ShowLocation = () => {
-  const { address } = useWatch<FormTypeCreateCinema>()
+  const { address } = useWatch<FormTypeCreateCinema>();
 
   return (
     <div>
       <span className="px-2 py-1 text-xs rounded bg-gray-50">
         {address?.lat?.toFixed(4)}
-      </span>{' '}
+      </span>{" "}
       <span className="px-2 py-1 text-xs rounded bg-gray-50">
         {address?.lng?.toFixed(4)}
       </span>
     </div>
-  )
-}
+  );
+};
 
 export const StaightMovieScreen = () => {
   return (
@@ -271,17 +284,19 @@ export const StaightMovieScreen = () => {
         <div className="flex-1 h-4 bg-gradient-to-tr from-transparent via-transparent to-gray" />
         <div className="flex-1 h-4 bg-gradient-to-tl from-transparent via-transparent to-gray" />
       </div>
-      <div className="text-xs text-center text-gray-500">Eyes this way</div>
+      <div className="text-xs text-center text-gray-500 dark:text-white">
+        Eyes this way
+      </div>
     </div>
-  )
-}
+  );
+};
 
 export const CurvedScreen = ({ width = 300, height = 10 }) => {
-  const curveOffset = height * 0.9 
+  const curveOffset = height * 0.9;
 
   return (
     <svg
-      width={'100%'}
+      width={"100%"}
       className="mt-6"
       height={height}
       viewBox={`0 0 ${width} ${height}`}
@@ -290,34 +305,33 @@ export const CurvedScreen = ({ width = 300, height = 10 }) => {
         d={`M 0,${height} L 0,0 Q ${
           width / 2
         },${curveOffset} ${width},0 L ${width},${height} Z`}
-        fill="Blue"
-
-/>
+        fill="black"
+      />
     </svg>
-  )
-}
-export const Grid = ({ rows, columns }: { rows:any; columns: any }) => {
+  );
+};
+export const Grid = ({ rows, columns }: { rows: any; columns: any }) => {
   const renderRows = () => {
-    const rowElements: JSX.Element[] = []
+    const rowElements: JSX.Element[] = [];
 
     for (let i = 0; i < rows; i++) {
-      const columnElements: JSX.Element[] = []
+      const columnElements: JSX.Element[] = [];
       for (let j = 0; j < columns; j++) {
-        columnElements.push(<Square key={`${i}-${j}`} />)
+        columnElements.push(<Square key={`${i}-${j}`} />);
       }
       rowElements.push(
         <div key={`row-${i}`} className="flex gap-1">
           {columnElements}
         </div>
-      )
+      );
     }
 
     return (
       <div className="flex flex-col items-center gap-2 px-2 overflow-x-auto">
         {rowElements}
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <div className="w-full ">
@@ -325,5 +339,5 @@ export const Grid = ({ rows, columns }: { rows:any; columns: any }) => {
 
       <CurvedScreen />
     </div>
-  )
-}
+  );
+};

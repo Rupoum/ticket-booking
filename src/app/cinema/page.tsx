@@ -2,16 +2,17 @@
 import React from "react";
 import { RecoilRoot } from "recoil";
 import { CreateCinema } from "../../components/templates/CreateCinema";
-import ProtectedRoute from "@/components/atoms/protecting";
+// import ProtectedRoute from "@/components/atoms/protecting";
 
 export default function Cinema() {
   return (
     <RecoilRoot>
-        <ProtectedRoute requiredRole="Customer">
-      <CreateCinema />
-      </ProtectedRoute>
+      {/* <ProtectedRoute requiredRole="Customer">
+     
+      </ProtectedRoute> */}
+      <div className="flex justify-center items-center ">
+        <CreateCinema />
+      </div>
     </RecoilRoot>
   );
 }
-
-
