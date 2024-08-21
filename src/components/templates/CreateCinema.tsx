@@ -2,7 +2,7 @@
 import { Label } from "../atoms/label";
 import { Input } from "../atoms/input";
 import { Button } from "../atoms/button";
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { useFormContext, useWatch, useFieldArray } from "react-hook-form";
 import { HtmlSelect } from "../atoms/select";
 import {
@@ -26,7 +26,7 @@ enum ProjectionType {
   Normal = "Normal",
 }
 
-enum SoundSystemTypes{
+enum SoundSystemTypes {
   Dolby = "Dolby",
   HighAmplifier = "HighAmplifier",
   Normal = "Normal",
@@ -41,43 +41,30 @@ export const CreateCinema = () => (
   </FormProviderCreateCinema>
 );
 
-
 export const CreateCinemaContent = ({}: ICreateCinemaProps) => {
   const { register, handleSubmit, setValue, reset } =
     useFormContext<FormTypeCreateCinema>();
 
-    const createCinema = async (cinemaData: FormTypeCreateCinema) => {
-      try {
-        const response = await axios.post(
-          "http://localhost:5000/api/cinema/cinema",
-          cinemaData,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("authtoken")}`,
-            },
-          }
-        );
-        console.log(response.data); // Ensure you log this
-        return response.data;
-      } catch (error: any) {
-        console.error("Error creating cinema:", error); // Log error
-        throw new Error(
-          error.response?.data?.message || "Failed to create cinema"
-        );
-      }
-    };
-    
-
-  // const onSubmit = async (data: FormTypeCreateCinema) => {
-  //   try {
-  //     await createCinema(data);
-  //     reset();
-  //     toast({ title: "Cinema created successfully." });
-  //     replace("/admin/cinemas");
-  //   } catch (error: any) {
-  //     toast({ title: error.message, variant: "destructive" });
-  //   }
-  // };
+  const createCinema = async (cinemaData: FormTypeCreateCinema) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/cinema/cinema",
+        cinemaData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authtoken")}`,
+          },
+        }
+      );
+      console.log(response.data); // Ensure you log this
+      return response.data;
+    } catch (error: any) {
+      console.error("Error creating cinema:", error); // Log error
+      throw new Error(
+        error.response?.data?.message || "Failed to create cinema"
+      );
+    }
+  };
 
   const { toast } = useToast();
   const { replace } = useRouter();
@@ -89,12 +76,7 @@ export const CreateCinemaContent = ({}: ICreateCinemaProps) => {
       </div>
       <form
         onSubmit={handleSubmit(
-          async ({
-            Address,
-            name,
-            screens,
-            managerId,
-          }) => {
+          async ({ Address, name, screens, managerId }) => {
             await createCinema({
               managerId,
               name,
@@ -109,7 +91,7 @@ export const CreateCinemaContent = ({}: ICreateCinemaProps) => {
         )}
         className=""
       >
-        <Label title="Cinema" className="text-2xl">
+        {/* <Label title="Cinema" className="text-2xl">
           <Input placeholder="Cinema name" {...register("name")} />
         </Label>
         <Label className="text-2xl" title="Manager ID">
@@ -123,7 +105,12 @@ export const CreateCinemaContent = ({}: ICreateCinemaProps) => {
 
         <button  type="submit" className="mt-6 dark:text-black" >
           Create cinema
-        </button>
+        </button> */}
+        <Input placeholder="Cinema name" />
+        <Input placeholder="Manager Id" />
+        <TextArea placeholder="Address" />
+        <AddScreens />
+        <Button className="text-black">Create cinema</Button>
       </form>
     </div>
   );
@@ -250,7 +237,7 @@ const AddScreens = () => {
               rows: 0,
               price: 0,
               projectionType: ProjectionType.Atoms,
-              soundSystemType:SoundSystemTypes.DOLBY_ATMOS
+              soundSystemType: SoundSystemTypes.DOLBY_ATMOS,
               // soundSystemType: SoundSystemType.DOLBY_ATMOS, // Example correction
             })
           }

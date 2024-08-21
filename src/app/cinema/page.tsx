@@ -4,8 +4,8 @@ import { RecoilRoot } from "recoil";
 import { CreateCinema } from "../../components/templates/CreateCinema";
 // import ProtectedRoute from "@/components/atoms/protecting";
 import { withAuth } from "@/components/useauth";
-import CreateCinemaPage from "@/components/temp/createc";
- function Cinema() {
+// import CreateCinemaPage from "@/components/temp/createc";
+function Cinema() {
   return (
     <RecoilRoot>
       {/* <ProtectedRoute requiredRole="Customer">
@@ -17,4 +17,5 @@ import CreateCinemaPage from "@/components/temp/createc";
       </div>
     </RecoilRoot>
   );
-} export default withAuth(Cinema,"Admin");
+}
+export default Cinema;
