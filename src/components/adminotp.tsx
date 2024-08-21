@@ -3,49 +3,64 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Button } from "../components/ui/button";
+import { useRecoilState } from "recoil";
+import { authState } from "./atoms/atomauth";
 import { Input } from "../components/ui/input";
-import { Coda } from "next/font/google";
+import {jwtDecode} from "jwt-decode"; // Correct import
 
 const OTPPage = () => {
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const[user,setuser]=useState({value:null});
+  const [auth, setAuth] = useRecoilState(authState);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    interface TempUserData {
-        name: string;
-        email: string;
-        password: string;
-    }
+
     try {
-      
-     
-    //   const tempUserData = localStorage.getItem('tempUserData');
-    const tempUserData = localStorage.getItem('tempUserData') || '{}';
+      const tempUserData = localStorage.getItem('tempUserData');
+      if (!tempUserData) {
+        throw new Error('No user data found in localStorage.');
+      }
+
       const parsedData = JSON.parse(tempUserData);
-    
-      console.log(tempUserData);
       const { name, email, password } = parsedData;
-    // const { name, email, password } = JSON.parse(localStorage.getItem('tempUserData') as any);
-      const response = await axios.post(`http://localhost:5000/api/admin/verifyotp`, {
+
+      // Validate that required fields are present
+      if (!name || !email || !password) {
+        throw new Error('Incomplete user data.');
+      }
+      localStorage.clear();
+      // Make the API call for OTP verification
+      const response = await axios.post('http://localhost:5000/api/admin/verifyotp', {
         code: otp,
         name,
         email,
-        password
-      },);
-console.log(otp);
+        password,
+      });
+
       if (response.status === 200) {
-        // Redirect to home page on successful OTP verification
+        const token = response.data.token;
+        const decodedToken = jwtDecode<{ role: string }>(token);
+        const user=response.data.user;
+        setAuth({
+          isAuthenticated: true,
+          role: decodedToken.role,
+          user: response.data.user,
+          token: token,
+        });
+        localStorage.setItem('authToken', token);
+        console.log(user.role)
         router.push('/');
       } else {
         setError(response.data.message || 'OTP verification failed. Please try again.');
       }
     } catch (error) {
-      setError('An error occurred. Please try again.');
+      setError(error instanceof Error ? error.message : 'An error occurred. Please try again.');
       console.error(error);
     } finally {
       setLoading(false);

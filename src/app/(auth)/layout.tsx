@@ -1,6 +1,6 @@
+"use client"
 import Image from "next/image";
 import BackgroundImage from "../../../public/assets/coverBg.png";
-import Logout from "./logout";
 import { RecoilRoot } from "recoil";
 export default function AuthLayout(
   
@@ -12,7 +12,7 @@ export default function AuthLayout(
 }>) {
   return (
     <div className="relative flex h-screen w-screen flex-col bg-black md:items-center md:justify-center md:bg-transparent">
-      <Logout></Logout>
+       
       <Image
         src={BackgroundImage}
         alt="background-img"

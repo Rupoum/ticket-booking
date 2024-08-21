@@ -15,11 +15,12 @@ const Signup = () => {
   const [formdata, setFormdata] = useState({ email: '', password: '', name: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  
   const [auth, setAuth] = useRecoilState(authState);
   const router = useRouter();
 
   const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent the form from refreshing the page on submit
+    e.preventDefault();
     setLoading(true);
     setError("");
     const signupData = {
@@ -37,7 +38,8 @@ const Signup = () => {
           isAuthenticated: true, 
           user: response.data.user,
           token:null,
-         role:USer.role
+        //  role:USer.role
+        role:"a"
         });
         // Redirect to OTP verification pages
         router.push('/otp');
@@ -52,7 +54,7 @@ const Signup = () => {
     }
   };
 
-  if (auth.isAuthenticated) return <div>You are already Signed in</div>;
+  if (auth?.isAuthenticated) return <div>You are already Signed in</div>;
 
   return (
     <div className="mt-24 rounded-xl bg-black/80 py-10 px-6 md:mt-0 md:max-w-sm md:px-14">

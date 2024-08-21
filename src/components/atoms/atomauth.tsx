@@ -10,7 +10,7 @@ interface AuthState {
 export const authState = atom<AuthState>({
   key: "authState",
   default: {
-    isAuthenticated: true,
+    isAuthenticated: false,
     token: null,
 	user:null,
 	role:"Customer"

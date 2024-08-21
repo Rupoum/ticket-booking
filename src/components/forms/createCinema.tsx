@@ -8,13 +8,13 @@ import { schemaCreateScreen } from './createScreen'
 export const schemaCreateAddress = z.object({
   lat: z.number(),
   lng: z.number(),
-  address: z.string(),
+  Address: z.string(),
 })
 
 export const schemaCreateCinema = z.object({
-  cinemaName: z.string().min(1, { message: 'Cinema name is required' }),
+  name: z.string().min(1, { message: 'Cinema name is required' }),
   managerId: z.string(),
-  address: schemaCreateAddress,
+  Address: schemaCreateAddress,
   screens: z.array(schemaCreateScreen),
 })
 
@@ -24,8 +24,8 @@ export const useFormCreateCinema = () =>
   useForm<FormTypeCreateCinema>({
     resolver: zodResolver(schemaCreateCinema),
     defaultValues: {
-      address: { address: '', lat: 0, lng: 0 },
-      cinemaName: '',
+      Address: { Address: '' },
+      name: '',
       screens: [],
     },
   })
