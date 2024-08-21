@@ -20,7 +20,7 @@ export const CinemaBooking = ({
         );
       }
       rowElements.push(
-        <div key={`row-${i}`} className="flex gap-5">
+        <div key={`row-${i}`} className="flex gap-4">
           {columnElements}
         </div>
       );

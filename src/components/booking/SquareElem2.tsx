@@ -1,5 +1,6 @@
 import React from "react";
 import { cn } from "../../components/utils";
+
 const SquareElem2 = ({
   booked = false,
   selected = false,
@@ -12,16 +13,25 @@ const SquareElem2 = ({
   column: number;
 }) => {
   return (
-    <div
-      className={cn(
-        "w-7 transition-all h-7 border border-black/50 dark:border-white rounded shadow-md cursor-pointer hover:bg-green-600",
-        booked ? "bg-gray-200 shadow-inner border-0" : "",
-        selected
-          ? "bg-primary-500  dark:bg-white p-1 border-0 shadow-black/30 shadow-lg"
-          : ""
+    <div className="flex  items-center ">
+      {/* Show row number only for the first box */}
+      {column === 0 && (
+        <span className="text-sm mr-10 text-gray-500">{`${String.fromCharCode(
+          65 + row
+        )}`}</span>
       )}
-    >
-      {/* {`R${row} C${column}`}{" "} */}
+      <div
+        className={cn(
+          "w-7 transition-all h-7 border border-green-400 dark:border-white text-green-400  shadow-md cursor-pointer hover:bg-green-600 hover:text-white flex items-center justify-center",
+          booked ? "bg-gray-200 shadow-inner border-0" : "",
+          selected
+            ? "bg-primary-500 dark:bg-white p-1 border-0 shadow-black/30 shadow-lg"
+            : ""
+        )}
+      >
+        {/* Display column number inside the box */}
+        <span className="text-xs">{`${column}`}</span>
+      </div>
     </div>
   );
 };

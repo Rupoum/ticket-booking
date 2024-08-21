@@ -17,7 +17,7 @@ const Date = () => {
         {times.map((time, index) => (
           <div
             key={index}
-            className="w-24 h-10 border-2  text-green-400 font-mono hover:bg-green-400 hover:text-black cursor-pointer px-1 bg-slate-50 flex items-center justify-center rounded"
+            className="w-24 h-10 border-2  text-green-400 font-mono hover:bg-green-400 hover:text-white cursor-pointer px-1 bg-slate-50 flex items-center justify-center rounded"
           >
             {time}
           </div>

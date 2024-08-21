@@ -27,7 +27,9 @@ const StraightScreen2 = ({
           fill={fillColor} // Use dynamic fill color
         />
       </svg>
-      <p className="mt-8 text-black dark:text-white">Eyes this way</p>
+      <p className="mt-8 text-gray-500 dark:text-white ">
+        All eyes this way please!
+      </p>
     </div>
   );
 };
