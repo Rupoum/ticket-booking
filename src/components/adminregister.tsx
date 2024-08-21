@@ -7,18 +7,20 @@ import axios from "axios";
 import { register } from "./axios/mainaxios";
 import { useRouter } from "next/navigation";
 import { useRecoilState } from "recoil";
-import { authstate } from "./atoms/atomauth";
+import { authState } from "./atoms/atomauth";
+import { user } from "@nextui-org/theme";
 
 const Signup = () => {
   // State variables to handle form input, loading, and error states
   const [formdata, setFormdata] = useState({ email: '', password: '', name: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [auth, setAuth] = useRecoilState(authstate);
+  
+  const [auth, setAuth] = useRecoilState(authState);
   const router = useRouter();
 
   const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent the form from refreshing the page on submit
+    e.preventDefault();
     setLoading(true);
     setError("");
     const signupData = {
@@ -30,14 +32,17 @@ const Signup = () => {
 
     try {
       const response = await axios.post("http://localhost:5000/api/admin/signup",signupData)
-      
+      const USer=response.data.user;
       if (response.status === 200) {
         setAuth({
-          isAuthinticated: false, // Not authenticated until OTP is verified
+          isAuthenticated: true, 
           user: response.data.user,
+          token:null,
+        //  role:USer.role
+        role:"a"
         });
         // Redirect to OTP verification pages
-        router.push('/otp');
+        router.push('/admin/otp');
         localStorage.setItem('tempUserData', JSON.stringify(signupData));
       } else {
         setError(response.data.message || "Signup failed. Please try again.");
@@ -49,7 +54,7 @@ const Signup = () => {
     }
   };
 
-  if (auth.isAuthinticated) return <div>You are already Signed in</div>;
+  if (auth?.isAuthenticated) return <div>You are already Signed in</div>;
 
   return (
     <div className="mt-24 rounded-xl bg-black/80 py-10 px-6 md:mt-0 md:max-w-sm md:px-14">

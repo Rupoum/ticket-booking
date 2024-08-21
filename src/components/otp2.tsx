@@ -12,6 +12,7 @@ const OTPPage = () => {
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const[user,setuser]=useState({value:null});
   const [auth, setAuth] = useRecoilState(authState);
   const router = useRouter();
 
@@ -21,7 +22,6 @@ const OTPPage = () => {
     setError('');
 
     try {
-      // Get and parse the tempUserData from localStorage
       const tempUserData = localStorage.getItem('tempUserData');
       if (!tempUserData) {
         throw new Error('No user data found in localStorage.');
@@ -34,7 +34,7 @@ const OTPPage = () => {
       if (!name || !email || !password) {
         throw new Error('Incomplete user data.');
       }
-
+      localStorage.clear();
       // Make the API call for OTP verification
       const response = await axios.post('http://localhost:5000/api/customer/verifyotp', {
         code: otp,
@@ -44,21 +44,17 @@ const OTPPage = () => {
       });
 
       if (response.status === 200) {
-        const token = response.data.token;
+        const { token, user } = response.data;
         const decodedToken = jwtDecode<{ role: string }>(token);
-
-        // Update the Recoil state with the decoded token information
+        // const user=response.data.user;
         setAuth({
           isAuthenticated: true,
           role: decodedToken.role,
           user: response.data.user,
           token: token,
         });
-
-      
-        // Save the token to localStorage
-        localStorage.setItem('authToken', token);
-
+        localStorage.setItem('authtoken', token);
+        console.log(user.role)
         router.push('/');
       } else {
         setError(response.data.message || 'OTP verification failed. Please try again.');

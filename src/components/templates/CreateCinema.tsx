@@ -2,7 +2,7 @@
 import { Label } from "../atoms/label";
 import { Input } from "../atoms/input";
 import { Button } from "../atoms/button";
-import React from "react";
+import React,{useState} from "react";
 import { useFormContext, useWatch, useFieldArray } from "react-hook-form";
 import { HtmlSelect } from "../atoms/select";
 import {
@@ -26,11 +26,11 @@ enum ProjectionType {
   Normal = "Normal",
 }
 
-enum SoundSystemType {
+enum SoundSystemTypes{
   Dolby = "Dolby",
   HighAmplifier = "HighAmplifier",
   Normal = "Normal",
-  DOLBY_ATMOS = "Ddolby_Atmos",
+  DOLBY_ATMOS = "Dolby_Atmos", // Check for typos here
 }
 
 export interface ICreateCinemaProps {}
@@ -41,39 +41,43 @@ export const CreateCinema = () => (
   </FormProviderCreateCinema>
 );
 
+
 export const CreateCinemaContent = ({}: ICreateCinemaProps) => {
   const { register, handleSubmit, setValue, reset } =
     useFormContext<FormTypeCreateCinema>();
 
-  const createCinema = async (cinemaData: FormTypeCreateCinema) => {
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/api/cinema/cinema",
-        cinemaData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      return response.data;
-    } catch (error: any) {
-      throw new Error(
-        error.response?.data?.message || "Failed to create cinema"
-      );
-    }
-  };
+    const createCinema = async (cinemaData: FormTypeCreateCinema) => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/cinema/cinema",
+          cinemaData,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("authtoken")}`,
+            },
+          }
+        );
+        console.log(response.data); // Ensure you log this
+        return response.data;
+      } catch (error: any) {
+        console.error("Error creating cinema:", error); // Log error
+        throw new Error(
+          error.response?.data?.message || "Failed to create cinema"
+        );
+      }
+    };
+    
 
-  const onSubmit = async (data: FormTypeCreateCinema) => {
-    try {
-      await createCinema(data);
-      reset();
-      toast({ title: "Cinema created successfully." });
-      replace("/admin/cinemas");
-    } catch (error: any) {
-      toast({ title: error.message, variant: "destructive" });
-    }
-  };
+  // const onSubmit = async (data: FormTypeCreateCinema) => {
+  //   try {
+  //     await createCinema(data);
+  //     reset();
+  //     toast({ title: "Cinema created successfully." });
+  //     replace("/admin/cinemas");
+  //   } catch (error: any) {
+  //     toast({ title: error.message, variant: "destructive" });
+  //   }
+  // };
 
   const { toast } = useToast();
   const { replace } = useRouter();
@@ -86,19 +90,15 @@ export const CreateCinemaContent = ({}: ICreateCinemaProps) => {
       <form
         onSubmit={handleSubmit(
           async ({
-            address: { address, lat, lng },
-            cinemaName,
+            Address,
+            name,
             screens,
             managerId,
           }) => {
             await createCinema({
               managerId,
-              cinemaName,
-              address: {
-                address,
-                lat,
-                lng,
-              },
+              name,
+              Address,
               screens,
             });
             reset();
@@ -110,20 +110,20 @@ export const CreateCinemaContent = ({}: ICreateCinemaProps) => {
         className=""
       >
         <Label title="Cinema" className="text-2xl">
-          <Input placeholder="Cinema name" {...register("cinemaName")} />
+          <Input placeholder="Cinema name" {...register("name")} />
         </Label>
         <Label className="text-2xl" title="Manager ID">
           <Input placeholder="Manager ID" {...register("managerId")} />
         </Label>
 
         <Label title="Address" className="text-2xl">
-          <TextArea placeholder="Address" {...register("address.address")} />
+          <TextArea placeholder="Address" {...register("Address.Address")} />
         </Label>
         <AddScreens />
 
-        <Button type="submit" className="mt-6 dark:text-black">
+        <button  type="submit" className="mt-6 dark:text-black" >
           Create cinema
-        </Button>
+        </button>
       </form>
     </div>
   );
@@ -184,7 +184,7 @@ const AddScreens = () => {
                   placeholder="sound system type"
                   {...register(`screens.${screenIndex}.soundSystemType`)}
                 >
-                  {Object.values(SoundSystemType).map((type: any) => (
+                  {Object.values(SoundSystemTypes).map((type: any) => (
                     <option key={type} value={type}>
                       {type}
                     </option>
@@ -250,28 +250,14 @@ const AddScreens = () => {
               rows: 0,
               price: 0,
               projectionType: ProjectionType.Atoms,
-              soundSystemType: SoundSystemType.Dolby,
+              soundSystemType:SoundSystemTypes.DOLBY_ATMOS
+              // soundSystemType: SoundSystemType.DOLBY_ATMOS, // Example correction
             })
           }
         >
           <Plus className="w-4 h-4" /> Add screen
         </Button>
       </div>
-    </div>
-  );
-};
-
-const ShowLocation = () => {
-  const { address } = useWatch<FormTypeCreateCinema>();
-
-  return (
-    <div>
-      <span className="px-2 py-1 text-xs rounded bg-gray-50">
-        {address?.lat?.toFixed(4)}
-      </span>{" "}
-      <span className="px-2 py-1 text-xs rounded bg-gray-50">
-        {address?.lng?.toFixed(4)}
-      </span>
     </div>
   );
 };
@@ -306,7 +292,6 @@ export const CurvedScreen = ({ width = 300, height = 10 }) => {
           width / 2
         },${curveOffset} ${width},0 L ${width},${height} Z`}
         fill="black"
-        className="dark:bg-white"
       />
     </svg>
   );

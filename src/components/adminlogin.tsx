@@ -12,6 +12,7 @@ const Login = () => {
   const [formdata, setFormdata] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
   const [auth, setAuth] = useRecoilState(authState);
   const router = useRouter();
 
@@ -23,7 +24,7 @@ const Login = () => {
     const login = { email: formdata.email, password: formdata.password };
 
     try {
-      const response = await axios.post("http://localhost:5000/api/customer/login", login);
+      const response = await axios.post("http://localhost:5000/api/admin/login", login);
 
       if (response.status === 200) {
         const { token, user } = response.data;
